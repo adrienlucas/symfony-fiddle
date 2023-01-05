@@ -1,6 +1,5 @@
-import {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useReducer, useState} from "react";
+import {createContext, ReactNode, useCallback, useContext, useMemo, useReducer } from "react";
 import FS from "fs";
-// import Module from '../php-wasm/php-web';
 type ccallInterface = (ident: string, returnType: string, argTypes: string[], args: any[], opts?: any[]) => any;
 
 export interface FileTree {
@@ -186,7 +185,7 @@ export const PhpProvider = (props: { children?: ReactNode }) => {
 
       if(!phpState.ccall) return
       phpState.ccall('pib_refresh', 'number', [], [])
-    }, [phpState.FS, phpState.ccall]),
+    }, [phpState]),
 
     executeCode: useCallback((code: string): string|null => {
       if (!phpState.ccall) return null
@@ -198,7 +197,7 @@ export const PhpProvider = (props: { children?: ReactNode }) => {
         ini_set('log_errors', 1);
         ${code}
       })();`])
-    }, [phpState.ccall]),
+    }, [phpState]),
     runCode: useCallback((code: string): number|null => {
       if (!phpState.ccall) return null
 
@@ -211,7 +210,7 @@ export const PhpProvider = (props: { children?: ReactNode }) => {
         ini_set('log_errors', 1);
         ${code}
         `])
-    }, [phpState.FS, phpState.ccall])
+    }, [phpState])
   }
 
   return (<phpContext.Provider value={contextValue} {...props} />)

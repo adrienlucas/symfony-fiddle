@@ -31,7 +31,6 @@ function App() {
 
 
   useEffect(() => {
-    console.log('trying to init', initializeModule)
     if(!initializeModule) return
     Module({
       onAbort(reason: string) {
@@ -56,7 +55,7 @@ function App() {
       phpModule.ccall('pib_init', 'number', ['string'], [])
       initializeModule(phpModule)
     })
-  }, [initializeModule])
+  }, [initializeModule, appendStdOut, appendStdErr])
 
   const selectFile = useCallback((fullPath: string, name: string) => {
     if(fullPath === '') return
