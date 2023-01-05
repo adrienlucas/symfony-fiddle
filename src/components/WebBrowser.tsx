@@ -13,10 +13,12 @@ const createPhpRequest = (method: string, uri: string, contentType: string, acce
 const WebBrowser = () => {
 
   const [uri, setUri] = useState('')
-  const { runCode } = usePhpContext()
+  const { clearStdOut, runCode } = usePhpContext()
 
   const runKernelQuery = useCallback((uri: string): number|null => {
     setUri(uri)
+    clearStdOut()
+
     const code = `
       global $_SERVER;
       $_SERVER['PHP_SELF'] = 'index.php';
@@ -36,7 +38,7 @@ const WebBrowser = () => {
     const response = runCode(code)
     console.log('response', response)
     return response
-  }, [setUri, runCode])
+  }, [clearStdOut, setUri, runCode])
 
   return (
     <>
@@ -44,7 +46,7 @@ const WebBrowser = () => {
         canMoveForward={false}
         canMoveBack={false}
         currentAddress={uri}
-        refresh={() => null}
+        refresh={() => runKernelQuery(uri)}
         goBack={() => null}
         goForward={() => null}
         goTo={runKernelQuery}
